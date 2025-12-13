@@ -30,7 +30,7 @@ spec:
                   - "true"
       containers:
       - name: codeproject-ai
-        image: codeproject/ai-server:cuda12_2-2.9.5
+        image: mikelud/ai-server:cuda12_8
         ports:
         - containerPort: 32168
         resources:
