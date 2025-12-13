@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: trustedtable
+  name: trustedtable
+  namespace: trustedtable
+spec:
+  selector:
+    matchLabels:
+      app: trustedtable
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+     maxUnavailable: 0
+     maxSurge: 2
+  template:
+    metadata:
+      labels:
+        app: trustedtable
+    spec:
+      containers:
+        - name: trustedtable
+          image: public.ecr.aws/b7c8g1g5/linuxeclipsed/php-sns-website:2025.5.4
+          imagePullPolicy: IfNotPresent
+          envFrom:
+          - secretRef:
+              name: trustedtable
+          ports:
+            - containerPort: 8080
+              name: website-port
+              protocol: TCP
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            successThreshold: 1
+            tcpSocket:
+              port: website-port
+            timeoutSeconds: 1
+          startupProbe:
+            httpGet:
+              path: /
+              port: website-port
+            initialDelaySeconds: 5
+            failureThreshold: 30
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 20m
+              memory: 40Mi
+            limits:
+              cpu: 100m
+              memory: 150Mi
+          volumeMounts:
+            - mountPath: /app
+              name: trustedtable-data
+      volumes:
+        - name: trustedtable-data
+          nfs:
+            server: 192.168.2.252
+            path: "/mnt/tank/nfs/Websites/trustedtable"
+            readOnly: true
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: trustedtable-api
+  name: trustedtable-api
+  namespace: trustedtable
+spec:
+  selector:
+    matchLabels:
+      app: trustedtable-api
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+     maxUnavailable: 0
+     maxSurge: 2
+  template:
+    metadata:
+      labels:
+        app: trustedtable-api
+    spec:
+      containers:
+        - name: trustedtable-api
+          image: public.ecr.aws/b7c8g1g5/linuxeclipsed/trustapi:dev
+          imagePullPolicy: Always
+          env:
+          - name: DB_PASSWORD
+            value: 'X1A7WcwFPDFxTmOt257iXNDn8XfkZkCZCT4ekgftZwUm7BYYKRToHTXGi0Eep9Cq'
+          - name: PGDB_USER
+            value: 'app'
+          - name: PGDB_NAME
+            value: 'trustedtable'
+          - name: PGDB_PORT
+            value: '5432'
+          - name: PGDB_HOST
+            value: 'pgcluster-trustedtable-rw'
+          ports:
+            - containerPort: 8000
+              name: api-port
+              protocol: TCP

@@ -19,7 +19,7 @@ spec:
      #       claimName: webui-storage-pvc
       containers:
         - name: webui
-          image: ghcr.io/open-webui/open-webui:main
+          image: ghcr.io/open-webui/open-webui:v0.6.35
        #   volumeMounts:
         #  - mountPath: /app/backend/data
          #   name: webui-storage

@@ -1,0 +1,130 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: qbittorrent-vpn
+  namespace: arr
+  labels:
+    app: qbittorrent-vpn
+spec:
+  restartPolicy: Always
+  containers:
+  - name: gluetun
+    image: qmcgaw/gluetun:latest
+    securityContext:
+      capabilities:
+        add: ["NET_ADMIN"]
+      privileged: true   # sometimes required depending on your runtime
+    volumeMounts:
+      - name: dev-net-tun
+        mountPath: /dev/net/tun
+      - name: config
+        mountPath: /config
+      - name: downloads
+        mountPath: /downloads
+    env:
+      - name: VPN_SERVICE_PROVIDER
+        value: "nordvpn"
+      - name: OPENVPN_USER
+        valueFrom:
+          secretKeyRef:
+            name: vpn-credentials
+            key: username
+      - name: OPENVPN_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: vpn-credentials
+            key: password
+      - name: SERVER_COUNTRIES
+        value: "United States"
+      - name: SERVER_CITIES
+        value: "San Francisco"
+      # Optional: to bind qBittorrent Web UI to all interfaces
+      - name: FIREWALL_VPN_INPUT_PORTS
+        value: "8080"
+      - name: FIREWALL_OUTBOUND_SUBNETS
+        value: "192.168.0.0/16,10.0.0.0/8"
+
+  - name: qbittorrent
+    image: lscr.io/linuxserver/qbittorrent:latest
+    env:
+      - name: PUID
+        value: "1000"
+      - name: PGID
+        value: "1000"
+      - name: TZ
+        value: "America/Los_Angeles"
+      - name: WEBUI_PORT
+        value: "8080"
+    ports:
+      - containerPort: 8080
+        name: webui
+  volumes:
+    - name: dev-net-tun
+      hostPath:
+        path: /dev/net/tun
+        type: CharDevice
+    - name: config
+      persistentVolumeClaim:
+        claimName: qbittorrent-data-pvc
+    - name: downloads
+      nfs:
+          server: 192.168.2.254
+          path: /mnt/tank/downloads
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: vpn-credentials
+  namespace: arr
+type: Opaque
+stringData:
+  username: "gryBXYH93Q1puVCeciqFJeqY"
+  password: "gTKGGK7iup5mnLvyHtygXxFr"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: qbittorrent-data-pvc
+  namespace: arr
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-client
+  resources:
+    requests:
+      storage: 500Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qbittorrent-vpn
+  namespace: arr
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: webui
+  selector:
+    app: qbittorrent-vpn
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: qbit-gateway
+  namespace: arr
+spec:
+  parentRefs:
+  - name: gateway-local-koryalbert
+    namespace: gateway
+    sectionName: local-koryalbert-net
+  hostnames:
+  - "downloader.local.koryalbert.net"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: qbittorrent-vpn
+      port: 8080

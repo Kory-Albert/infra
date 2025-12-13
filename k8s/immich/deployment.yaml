@@ -1,0 +1,123 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-postgres
+  namespace: immich
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich-postgres
+  template:
+    metadata:
+      labels:
+        app: immich-postgres
+    spec:
+      containers:
+      - name: postgres
+        image: tensorchord/pgvecto-rs:pg14-v0.2.0
+        env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: immich-env
+              key: DB_USERNAME
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: immich-env
+              key: DB_PASSWORD
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: immich-env
+              key: DB_DATABASE_NAME
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: immich-postgres-pvc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-redis
+  namespace: immich
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich-redis
+  template:
+    metadata:
+      labels:
+        app: immich-redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:7
+        args: ["--save", "", "--appendonly", "no"]
+        ports:
+        - containerPort: 6379
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-server
+  namespace: immich
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich-server
+  template:
+    metadata:
+      labels:
+        app: immich-server
+    spec:
+      containers:
+      - name: server
+        image: ghcr.io/immich-app/immich-server:v2.2.3
+        envFrom:
+        - secretRef:
+            name: immich-env
+        ports:
+        - containerPort: 3001
+        volumeMounts:
+            - mountPath: /data
+              name: immich-data
+      volumes:
+        - name: immich-data
+          nfs:
+            server: 192.168.2.254
+            path: "/mnt/tank/k8s/immich"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-machine-learning
+  namespace: immich
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich-machine-learning
+  template:
+    metadata:
+      labels:
+        app: immich-machine-learning
+    spec:
+      containers:
+      - name: machine-learning
+        image: ghcr.io/immich-app/immich-machine-learning:v2.2.3
+        envFrom:
+        - secretRef:
+            name: immich-env
+        ports:
+        - containerPort: 3003

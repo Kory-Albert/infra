@@ -43,7 +43,7 @@ spec:
           protocol: TCP
         env:
         - name: PRELOAD_MODELS
-          value: "deepseek-coder-v2:16b"
+          value: "qwen3-coder:30b"
         - name: OLLAMA_KEEP_ALIVE
           value: "12h"
         lifecycle:

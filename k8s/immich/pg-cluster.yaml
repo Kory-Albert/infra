@@ -1,0 +1,30 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: immich-db
+spec:
+  instances: 1
+
+  imageName: ghcr.io/cloudnative-pg/postgresql:15
+
+  postgresql:
+    shared_preload_libraries:
+      - vectorcord
+
+    externalExtensions:
+      - name: vectorcord
+        image: ghcr.io/tensorchord/cloudnative-vectorchord:latest
+
+    parameters:
+      dynamic_library_path: "/var/lib/postgresql/extensions"
+
+  bootstrap:
+    initdb:
+      database: immich
+      owner: immich
+      postInitApplicationSQL:
+        - CREATE EXTENSION IF NOT EXISTS vectorcord;
+
+  storage:
+    size: 20Gi
+    storageClass: nfs-client

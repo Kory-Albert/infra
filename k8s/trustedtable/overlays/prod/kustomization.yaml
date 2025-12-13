@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+namespace: trustedtable
+
+#configMapGenerator:
+#- name: react-app-config
+#  files:
+#  - config.js
+
+#patches:
+#- path: ingress-patch.yaml
+
+images:
+  - name: public.ecr.aws/b7c8g1g5/linuxeclipsed/php-sns-website
+    newTag: 2025.5.4
+  - name: public.ecr.aws/b7c8g1g5/linuxeclipsed/trustapi
+    newTag: dev

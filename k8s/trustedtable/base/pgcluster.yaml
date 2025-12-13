@@ -1,0 +1,29 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: pgcluster-trustedtable
+  namespace: trustedtable
+spec:
+  instances: 2
+  primaryUpdateStrategy: unsupervised
+  bootstrap:
+    initdb:
+      database: trustedtable
+      owner: app
+      secret:
+        name: pgcluster-trustedtable-app
+  enableSuperuserAccess: false
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "1"
+    limits:
+      memory: "1Gi"
+      cpu: "2"
+  affinity:
+    enablePodAntiAffinity: true
+    podAntiAffinityType: preferred
+    topologyKey: kubernetes.io/hostname
+  storage:
+    storageClass: longhorn-xfs-1rep
+    size: 2Gi

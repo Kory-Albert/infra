@@ -55,6 +55,6 @@ spec:
       volumes:
         - name: koryalbert-data
           nfs:
-            server: 192.168.2.244
-            path: "/mnt/media/files/Websites/koryalbert"
+            server: 192.168.2.254
+            path: "/mnt/tank/documents/Websites/koryalbert"
             readOnly: true

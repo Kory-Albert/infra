@@ -1,0 +1,37 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+namespace: trustedtable-dev
+
+#configMapGenerator:
+#- name: react-app-config
+#  files:
+#  - config.js
+
+patches:
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: trustedtable-app
+    path: app-path-patch.yaml
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: trustedtable-image-api
+    path: image-path-patch.yaml
+
+#patches:
+#- path: dep-patch.yaml
+
+images:
+  - name: php
+    newTag: 8.2.28-apache
+  - name: public.ecr.aws/b7c8g1g5/linuxeclipsed/trustapi
+    newTag: dev
+  - name: public.ecr.aws/b7c8g1g5/linuxeclipsed/image-api
+    newTag: dev
