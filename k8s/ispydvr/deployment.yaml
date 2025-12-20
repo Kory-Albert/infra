@@ -13,19 +13,6 @@ spec:
       labels:
         app: ispyagentdvr
     spec:
-      tolerations:
-      - key: "nvidia.com/gpu"
-        operator: "Equal"
-        value: "true"
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: gpu
-                operator: In
-                values:
-                  - "true"
       hostNetwork: true  # Required for UDP port ranges
       containers:
       - name: ispyagentdvr
@@ -33,9 +20,6 @@ spec:
         envFrom:
         - configMapRef:
             name: agentdvr-config
-        resources:
-          limits:
-            nvidia.com/gpu: 1
         ports:
         - containerPort: 8090
         - containerPort: 3478 
@@ -44,6 +28,12 @@ spec:
           mountPath: /AgentDVR/Media/XML
         - name: media-volume
           mountPath: /AgentDVR/Media/WebServerRoot/Media
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8090
+          initialDelaySeconds: 30
+          periodSeconds: 10
       volumes:
       - name: config-volume
         persistentVolumeClaim:
