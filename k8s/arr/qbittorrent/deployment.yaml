@@ -72,16 +72,6 @@ spec:
           path: /mnt/tank/downloads
 ---
 apiVersion: v1
-kind: Secret
-metadata:
-  name: vpn-credentials
-  namespace: arr
-type: Opaque
-stringData:
-  username: "gryBXYH93Q1puVCeciqFJeqY"
-  password: "gTKGGK7iup5mnLvyHtygXxFr"
----
-apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: qbittorrent-data-pvc
