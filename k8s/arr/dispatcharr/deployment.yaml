@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dispatcharr
+  namespace: arr
+  labels:
+    app: dispatcharr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dispatcharr
+  template:
+    metadata:
+      labels:
+        app: dispatcharr
+    spec:
+      containers:
+      - name: dispatcharr
+        image: ghcr.io/dispatcharr/dispatcharr:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9191
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 9191
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        volumeMounts:
+        - name: dispatcharr-data
+          mountPath: /data
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+      volumes:
+      - name: dispatcharr-data
+        persistentVolumeClaim:
+          claimName: dispatcharr-pvc

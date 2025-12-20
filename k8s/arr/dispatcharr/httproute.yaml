@@ -1,0 +1,20 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: dispatcharr-gateway
+  namespace: arr
+spec:
+  parentRefs:
+  - name: gateway-local-koryalbert
+    namespace: gateway
+    sectionName: local-koryalbert-net
+  hostnames:
+  - "dispatcharr.local.koryalbert.net"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: dispatcharr
+      port: 9191
