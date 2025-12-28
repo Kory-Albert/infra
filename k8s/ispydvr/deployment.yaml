@@ -30,7 +30,7 @@ spec:
           mountPath: /AgentDVR/Media/WebServerRoot/Media
         resources:
           requests:
-            cpu: 1000m
+            cpu: 1.5
             memory: 512Mi
         readinessProbe:
           httpGet:
