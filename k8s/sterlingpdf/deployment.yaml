@@ -22,10 +22,10 @@ spec:
         image: frooodle/s-pdf:0.36.0
         resources:
           requests:
-            cpu: "100m"
+            cpu: "10m"
             memory: "200Mi"
           limits:
-            cpu: "700m"
+            cpu: "200m"
             memory: "300Mi"
         livenessProbe:
           httpGet:
