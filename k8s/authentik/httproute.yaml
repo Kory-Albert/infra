@@ -5,16 +5,15 @@ metadata:
   namespace: authentik-dmz
 spec:
   parentRefs:
-  - name: gateway-external
-    namespace: gateway
-    sectionName: koryalbert-net
+    - name: gateway-external
+      namespace: gateway
   hostnames:
-  - "authentik.koryalbert.net"
+    - "authentik.koryalbert.net"
   rules:
-  - matches:
-    - path:
-        type: PathPrefix
-        value: /
-    backendRefs:
-    - name: my-authentik-server
-      port: 80
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: my-authentik-server
+          port: 80

@@ -5,37 +5,16 @@ metadata:
   namespace: auburntech-dmz
 spec:
   parentRefs:
-  - name: gateway-external
-    namespace: gateway
-    sectionName: auburntech-net
+    - name: gateway-external
+      namespace: gateway
   hostnames:
-  - "www.auburntechconsulting.com"
+    - "auburntechconsulting.com"
+    - "www.auburntechconsulting.com"
   rules:
-  - matches:
-    - path:
-        type: PathPrefix
-        value: /
-    backendRefs:
-    - name: auburntech
-      port: 8080
----
-apiVersion: gateway.networking.k8s.io/v1
-kind: HTTPRoute
-metadata:
-  name: auburntech-root-gateway
-  namespace: auburntech-dmz
-spec:
-  parentRefs:
-  - name: gateway-external
-    namespace: gateway
-    sectionName: auburntech-net-root
-  hostnames:
-  - "auburntechconsulting.com"
-  rules:
-  - matches:
-    - path:
-        type: PathPrefix
-        value: /
-    backendRefs:
-    - name: auburntech
-      port: 8080
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: auburntech
+          port: 8080

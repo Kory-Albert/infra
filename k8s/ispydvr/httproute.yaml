@@ -1,0 +1,20 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: dvr-gateway
+  namespace: dvr
+spec:
+  parentRefs:
+  - name: gateway-local-koryalbert
+    namespace: gateway
+    sectionName: http
+  hostnames:
+  - "dvr.local.koryalbert.net"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: ispyagentdvr
+      port: 8090

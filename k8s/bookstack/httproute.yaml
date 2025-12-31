@@ -5,16 +5,15 @@ metadata:
   namespace: bookstack-dmz
 spec:
   parentRefs:
-  - name: gateway-external
-    namespace: gateway
-    sectionName: koryalbert-net
+    - name: gateway-external
+      namespace: gateway
   hostnames:
-  - "kb.koryalbert.net"
+    - "kb.koryalbert.net"
   rules:
-  - matches:
-    - path:
-        type: PathPrefix
-        value: /
-    backendRefs:
-    - name: bookstack
-      port: 80
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: bookstack
+          port: 80
