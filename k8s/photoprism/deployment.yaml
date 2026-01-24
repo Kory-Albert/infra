@@ -47,9 +47,10 @@ spec:
       volumes:
       - name: cache-storage
         nfs:
-          server: 192.168.2.252
-          path: /mnt/Junk/Photoprism 
+          server: 192.168.2.254
+          path: /mnt/tank/k8s/photoprismCache
       - name: photo-storage
         nfs:
-          server: 192.168.2.252
-          path: /mnt/tank/nfs/Pictures
+          server: 192.168.2.254
+          path: /mnt/tank/pictures
+          readOnly: true
