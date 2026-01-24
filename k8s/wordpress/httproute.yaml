@@ -5,9 +5,8 @@ metadata:
   namespace: jta
 spec:
   parentRefs:
-  - name: gateway-external
-    namespace: gateway
-    sectionName: auburntech-net
+    - name: gateway-external
+      namespace: gateway
   hostnames:
   - "jta.auburntechconsulting.com"
   rules:
