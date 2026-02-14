@@ -29,7 +29,7 @@ spec:
       priorityClassName: high
       containers:
         - name: jellyfin
-          image: lscr.io/linuxserver/jellyfin:10.10.7
+          image: lscr.io/linuxserver/jellyfin:10.11.6
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8096
@@ -52,9 +52,6 @@ spec:
           resources:
             limits:
               nvidia.com/gpu: 1
-            requests:
-              cpu: "0.5"
-              memory: "500Mi"
           readinessProbe:
             httpGet:
               path: /web
