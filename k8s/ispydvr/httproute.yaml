@@ -18,3 +18,7 @@ spec:
     backendRefs:
     - name: ispyagentdvr
       port: 8090
+    # Streaming timeouts
+    timeouts:
+      backendRequest: 8h
+      request: 8h
