@@ -43,13 +43,9 @@ spec:
           protocol: TCP
         env:
         - name: PRELOAD_MODELS
-          value: "qwen3-coder:30b"
+          value: "gemma3:14b"
         - name: OLLAMA_KEEP_ALIVE
           value: "12h"
-        lifecycle:
-          postStart:
-            exec:
-              command: ["/bin/sh", "-c", "for model in $PRELOAD_MODELS; do ollama run $model \"\"; done"]
       volumes:
       - name: ollama-storage
         persistentVolumeClaim:
