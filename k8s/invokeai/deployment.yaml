@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: invokeai
+  namespace: ai
+  labels:
+    app: invokeai
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: invokeai
+  template:
+    metadata:
+      labels:
+        app: invokeai
+    spec:
+      tolerations:
+      - key: "nvidia.com/gpu"
+        operator: "Equal"
+        value: "true"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: gpu
+                operator: In
+                values:
+                  - "true"
+      containers:
+      - name: invokeai
+        image: ghcr.io/invoke-ai/invokeai
+        ports:
+        - containerPort: 9090
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+          requests:
+            nvidia.com/gpu: 1
+        volumeMounts:
+            - name: invokeai-storage
+              mountPath: /invokeai
+      volumes:
+          - name: invokeai-storage
+            persistentVolumeClaim:
+              claimName: invokeai-pvc
