@@ -19,14 +19,11 @@ spec:
     spec:
       containers:
       - name: sterlingpdf
-        image: frooodle/s-pdf:0.36.0
+        image: frooodle/s-pdf:2.4.5
         resources:
           requests:
             cpu: "10m"
             memory: "200Mi"
-          limits:
-            cpu: "200m"
-            memory: "300Mi"
         readinessProbe:
           httpGet:
             path: /
@@ -36,9 +33,7 @@ spec:
           periodSeconds: 10
           failureThreshold: 3
         env:
-            - name: DOCKER_ENABLE_SECURITY
-              value: "false"
-            - name: NSTALL_BOOK_AND_ADVANCED_HTML_OPS
+            - name: SECURITY_ENABLE_LOGIN
               value: "false"
         volumeMounts:
             - mountPath: /configs
