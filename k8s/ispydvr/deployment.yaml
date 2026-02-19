@@ -14,6 +14,7 @@ spec:
         app: ispyagentdvr
     spec:
       hostNetwork: true  # Required for UDP port ranges
+      dnsPolicy: ClusterFirstWithHostNet
       containers:
       - name: ispyagentdvr
         image: mekayelanik/ispyagentdvr:6.3.3.0-21042025
