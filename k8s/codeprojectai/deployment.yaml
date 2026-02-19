@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: codeproject-ai
-  namespace: codeprojectai
+  namespace: ai
   labels:
     app: codeproject-ai
 spec:
