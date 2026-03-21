@@ -1,3 +1,0 @@
-- op: replace
-  path: /spec/template/spec/volumes/0/nfs/path
-  value: "/mnt/tank/nfs/Websites/trustedtable-dev/images"
