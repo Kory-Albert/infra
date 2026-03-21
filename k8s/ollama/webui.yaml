@@ -28,6 +28,8 @@ spec:
               value: "http://ollama"
             - name: WEBUI_AUTH
               value: "False"
+            - name: ENABLE_VERSION_UPDATE_CHECK
+              value: "false"
           ports:
             - name: http
               containerPort: 8080

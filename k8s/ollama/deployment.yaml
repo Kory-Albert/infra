@@ -28,7 +28,7 @@ spec:
                   - "true"
       containers:
       - name: ollama
-        image: ollama/ollama:0.12.9
+        image: ollama/ollama:0.18.2
         volumeMounts:
           - mountPath: /root/.ollama
             name: ollama-storage
@@ -42,10 +42,8 @@ spec:
           containerPort: 11434
           protocol: TCP
         env:
-        - name: PRELOAD_MODELS
-          value: "gemma3:14b"
         - name: OLLAMA_KEEP_ALIVE
-          value: "12h"
+          value: "24h"
       volumes:
       - name: ollama-storage
         persistentVolumeClaim:
