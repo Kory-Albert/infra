@@ -4,7 +4,6 @@ metadata:
   labels:
     app: sterlingpdf
   name: sterlingpdf
-  namespace: pdf
 spec:
   ports:
     - port: 8080
