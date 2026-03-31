@@ -44,6 +44,8 @@ spec:
         env:
         - name: OLLAMA_KEEP_ALIVE
           value: "24h"
+        - name: OLLAMA_CONTEXT_LENGTH
+          value: "24576"
       volumes:
       - name: ollama-storage
         persistentVolumeClaim:
