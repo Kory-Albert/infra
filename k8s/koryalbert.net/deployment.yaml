@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: koryalbert-net
+  namespace: koryalbert-net
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: koryalbert-net
+  template:
+    metadata:
+      labels:
+        app: koryalbert-net
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:alpine
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: website
+              mountPath: /usr/share/nginx/html
+              readOnly: true
+      volumes:
+        - name: website
+          nfs:
+            server: 192.168.2.254
+            path: /mnt/tank/documents/Websites/koryalbert-net
+            readOnly: true

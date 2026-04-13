@@ -13,6 +13,7 @@ spec:
       labels:
         app: ispyagentdvr
     spec:
+      priorityClassName: "high"
       hostNetwork: true  # Required for UDP port ranges
       dnsPolicy: ClusterFirstWithHostNet
       containers:
