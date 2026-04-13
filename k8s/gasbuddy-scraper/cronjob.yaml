@@ -12,7 +12,7 @@ spec:
         spec:
           containers:
           - name: gasbuddy-scraper
-            image: public.ecr.aws/b7c8g1g5/linuxeclipsed/gasbuddy-scraper:25.04.22
+            image: registry.local.koryalbert.net/gasbuddyscraper:26.04.12
             env:
             - name: INFLUXDB_TOKEN
               valueFrom:
