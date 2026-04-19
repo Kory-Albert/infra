@@ -28,7 +28,7 @@ spec:
                   - "true"
       containers:
       - name: ollama
-        image: ollama/ollama:0.18.2
+        image: ollama/ollama:0.21.0
         volumeMounts:
           - mountPath: /root/.ollama
             name: ollama-storage
@@ -45,7 +45,7 @@ spec:
         - name: OLLAMA_KEEP_ALIVE
           value: "24h"
         - name: OLLAMA_CONTEXT_LENGTH
-          value: "24576"
+          value: "64000"
       volumes:
       - name: ollama-storage
         persistentVolumeClaim:
