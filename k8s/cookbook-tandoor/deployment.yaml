@@ -38,6 +38,8 @@ spec:
               value: "0"
             - name: ALLOWED_HOSTS
               value: "*"
+            - name: SPACE_DEFAULT_ALLOW_SHARING
+              value: "1"
             - name: SECRET_KEY
               valueFrom:
                 secretKeyRef:
