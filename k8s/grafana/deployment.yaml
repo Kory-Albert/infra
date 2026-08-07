@@ -4,7 +4,6 @@ metadata:
   labels:
     app: grafana
   name: grafana
-  namespace: grafana
 spec:
   selector:
     matchLabels:
@@ -55,4 +54,4 @@ spec:
       volumes:
         - name: grafana-data
           persistentVolumeClaim:
-            claimName: grafana-data-nfs-pvc
+            claimName: grafana-data-pvc

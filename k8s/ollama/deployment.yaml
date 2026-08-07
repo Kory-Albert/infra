@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ollama
-  namespace: ollama
+  namespace: ai
 spec:
   replicas: 1
   selector:
@@ -13,30 +13,12 @@ spec:
       labels:
         name: ollama
     spec:
-      tolerations:
-      - key: "nvidia.com/gpu"
-        operator: "Equal"
-        value: "true"
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: gpu
-                operator: In
-                values:
-                  - "true"
       containers:
       - name: ollama
-        image: ollama/ollama:0.21.1
+        image: ollama/ollama:0.30.10
         volumeMounts:
           - mountPath: /root/.ollama
             name: ollama-storage
-        resources:
-          limits:
-            nvidia.com/gpu: 1
-          requests:
-            memory: 15Gi
         ports:
         - name: http
           containerPort: 11434

@@ -1,0 +1,55 @@
+# 1. Service without a selector
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-uptimekuma-svc
+  namespace: default
+spec:
+  ports:
+    - protocol: TCP
+      port: 3001
+      targetPort: 3001
+---
+# 2. Manual EndpointSlice linking the IP (replacing Endpoints)
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
+metadata:
+  name: external-uptimekuma-svc # MUST match the Service name
+  namespace: default
+  labels:
+    kubernetes.io/service-name: external-uptimekuma-svc
+addressType: IPv4
+ports:
+  - port: 3001
+    protocol: TCP
+endpoints:
+  - addresses:
+      - 192.168.252.21
+    conditions:
+      ready: true
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: external-proxy-uptimekuma
+  namespace: default
+spec:
+  parentRefs:
+    - name: gateway-local-koryalbert
+      namespace: gateway
+      sectionName: local-koryalbert-net
+  hostnames:
+    - "uptime.local.koryalbert.net"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            hostname: "uptime.local.koryalbert.net"
+      backendRefs:
+        - name: external-uptimekuma-svc
+          port: 3001
+

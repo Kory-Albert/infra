@@ -52,7 +52,7 @@ spec:
       volumes:
       - name: radarr-data
         persistentVolumeClaim:
-          claimName: radarr-data-nfs-pvc
+          claimName: radarr-data-pvc
       - name: movies
         nfs:
           server: 192.168.2.254

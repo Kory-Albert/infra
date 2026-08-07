@@ -4,7 +4,6 @@ metadata:
   labels:
     app: speedtest-tracker
   name: speedtest-tracker
-  namespace: speedtest
 spec:
   ports:
     - port: 80
@@ -15,11 +14,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgres
-  namespace: speedtest
+  name: speedtest-postgres
 spec:
   ports:
     - port: 5432
   selector:
-    app: postgres
+    app: speedtest-postgres
   type: ClusterIP

@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: speedtest-tracker
-  namespace: speedtest
 spec:
   replicas: 1
   selector:
@@ -48,7 +47,7 @@ spec:
             - name: DB_CONNECTION
               value: pgsql
             - name: DB_HOST
-              value: "postgres"
+              value: "speedtest-postgres"
             - name: DB_PORT
               value: "5432"
             - name: DB_DATABASE
@@ -75,4 +74,4 @@ spec:
       volumes:
         - name: speedtest-tracker
           persistentVolumeClaim:
-            claimName: speedtest-app-nfs-pvc
+            claimName: speedtest-app-pvc

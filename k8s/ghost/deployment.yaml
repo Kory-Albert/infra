@@ -64,4 +64,4 @@ spec:
       volumes:
         - name: ghost-data
           persistentVolumeClaim:
-            claimName: ghost-app-nfs-pvc
+            claimName: ghost-app-pvc

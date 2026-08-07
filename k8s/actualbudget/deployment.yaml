@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: actual-budget
-  namespace: actualbudget
+  namespace: default
 spec:
   replicas: 1
   selector:
@@ -37,4 +37,4 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: actual-budget-nfs-pvc
+            claimName: actual-budget-pvc

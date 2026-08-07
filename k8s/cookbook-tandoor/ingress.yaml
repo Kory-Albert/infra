@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cookbook-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: traefik
+  tls:
+  - hosts:
+    - cookbook.local.koryalbert.net
+    secretName: cookbook-local-tls-cert
+  rules:
+  - host: cookbook.local.koryalbert.net
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: cookbook-web
+            port:
+              number: 80

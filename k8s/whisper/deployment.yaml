@@ -15,22 +15,9 @@ spec:
       labels:
         app: whisper
     spec:
-      tolerations:
-      - key: "nvidia.com/gpu"
-        operator: "Equal"
-        value: "true"
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: gpu
-                operator: In
-                values:
-                  - "true"
       containers:
       - name: whisper
-        image: lscr.io/linuxserver/faster-whisper:gpu
+        image: lscr.io/linuxserver/faster-whisper:latest
         ports:
         - containerPort: 10300
         env:
@@ -38,6 +25,3 @@ spec:
           value: tiny-int8
         - name: WHISPER_LANG
           value: en
-        resources:
-          limits:
-            nvidia.com/gpu: 1

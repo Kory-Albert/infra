@@ -43,7 +43,7 @@ spec:
       volumes:
       - name: config-volume
         persistentVolumeClaim:
-          claimName: ispyagentdvr-config-nfs-pvc
+          claimName: ispyagentdvr-config-pvc
       - name: media-volume
         nfs:
           server: 192.168.2.254

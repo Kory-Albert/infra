@@ -52,7 +52,7 @@ spec:
       volumes:
       - name: sonarr-data
         persistentVolumeClaim:
-          claimName: sonarr-data-nfs-pvc
+          claimName: sonarr-data-pvc
       - name: tvseries
         nfs:
           server: 192.168.2.254

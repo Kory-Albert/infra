@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cookbook-app
-  namespace: cookbook
   labels:
     app.kubernetes.io/name: cookbook-app
     app: cookbook-app
@@ -90,7 +89,7 @@ spec:
       volumes:
         - name: cookbook-config
           persistentVolumeClaim:
-            claimName: cookbook-app-nfs-pvc
+            claimName: cookbook-app-pvc
         - name: nginx-config
           configMap:
             name: cookbook-configmap
@@ -99,7 +98,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cookbook-web
-  namespace: cookbook
   labels:
     app.kubernetes.io/name: cookbook-web
     app: cookbook-web
@@ -136,7 +134,7 @@ spec:
       volumes:
         - name: cookbook-config
           persistentVolumeClaim:
-            claimName: cookbook-app-nfs-pvc
+            claimName: cookbook-app-pvc
         - name: nginx-config
           configMap:
             name: cookbook-configmap

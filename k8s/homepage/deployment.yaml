@@ -39,6 +39,9 @@ spec:
               port: 3000
             initialDelaySeconds: 10
             periodSeconds: 5
+          resources:
+            requests:
+              memory: 150Mi
       volumes:
         - name: homepage-config
           configMap:

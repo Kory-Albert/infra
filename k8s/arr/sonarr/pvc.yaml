@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: sonarr-data-nfs-pvc
+  name: sonarr-data-pvc
   namespace: arr
 spec:
   accessModes:
-    - ReadWriteMany
-  storageClassName: nfs-client
+    - ReadWriteOnce
+  storageClassName: local-path
   resources:
     requests:
       storage: 3Gi

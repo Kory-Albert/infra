@@ -19,20 +19,20 @@ spec:
       - key: "nvidia.com/gpu"
         operator: "Equal"
         value: "true"
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: gpu
-                operator: In
-                values:
-                  - "true"
+#      affinity:
+#        nodeAffinity:
+#          requiredDuringSchedulingIgnoredDuringExecution:
+#            nodeSelectorTerms:
+#            - matchExpressions:
+#              - key: gpu
+#                operator: In
+#                values:
+#                  - "true"
       containers:
       - name: codeproject-ai
-        image: mikelud/ai-server:cuda12_8
+        image: codeproject/ai-server:2.9.7
         ports:
         - containerPort: 32168
-        resources:
-          limits:
-            nvidia.com/gpu: 1
+#        resources:
+#          limits:
+#            nvidia.com/gpu: 1

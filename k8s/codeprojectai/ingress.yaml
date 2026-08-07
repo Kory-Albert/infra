@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: codeproject-ingress
+  namespace: ai
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: traefik
+  tls:
+  - hosts:
+    - codeprojectai.local.koryalbert.net
+    secretName: codeprojectai-local-tls-cert
+  rules:
+  - host: codeprojectai.local.koryalbert.net
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: codeproject-ai
+            port:
+              number: 32168

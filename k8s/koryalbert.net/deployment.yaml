@@ -24,7 +24,5 @@ spec:
               readOnly: true
       volumes:
         - name: website
-          nfs:
-            server: 192.168.2.254
-            path: /mnt/tank/documents/Websites/koryalbert-net
-            readOnly: true
+          persistentVolumeClaim:
+            claimName: koryalbert-net-pvc

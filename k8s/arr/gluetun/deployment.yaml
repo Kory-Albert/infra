@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nordvpn-gluetun
+  namespace: gluetun
+  labels:
+    app: gluetun
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gluetun
+  template:
+    metadata:
+      labels:
+        app: gluetun
+    spec:
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+      containers:
+      - name: gluetun
+        image: qmcgaw/gluetun:v3
+        securityContext:
+          runAsNonRoot: false
+          runAsUser: 0
+          allowPrivilegeEscalation: true
+          capabilities:
+            add:
+              - NET_ADMIN
+              - CHOWN        # FIX: Allows Gluetun to manage its internal file permissions
+            drop:
+              - ALL
+        env:
+        - name: VPN_SERVICE_PROVIDER
+          value: "nordvpn"
+        - name: VPN_TYPE
+          value: "wireguard"
+        - name: WIREGUARD_PRIVATE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: qbittorrent-secret
+              key: WIREGUARD_PRIVATE_KEY
+        - name: SERVER_COUNTRIES
+          value: "United States"
+        - name: SERVER_CITIES
+          value: "San Francisco"
+        - name: DNS_ADDRESS
+          value: "103.86.96.100"
+        - name: FIREWALL_INPUT_PORTS
+          value: "8080"
+        - name: DNS_KEEP_NAMESERVERS
+          value: "on"
+        - name: DOT
+          value: "off"
+        - name: BLOCK_MALICIOUS
+          value: "off"
+        - name: SERVER_CATEGORIES
+          value: "p2p"
+        volumeMounts:
+        - name: dev-net-tun
+          mountPath: /dev/net/tun
+        - name: gluetun-tmp
+          mountPath: /tmp/gluetun
+
+      - name: qbittorrent
+        image: lscr.io/linuxserver/qbittorrent:latest
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: dev-net-tun
+          mountPath: /dev/net/tun
+        - name: gluetun-tmp
+          mountPath: /tmp/gluetun
+        - name: nfs-media
+          mountPath: /downloads
+        - name: config
+          mountPath: /config
+      volumes:
+      - name: dev-net-tun
+        hostPath:
+          path: /dev/net/tun
+          type: CharDevice
+      - name: gluetun-tmp
+        emptyDir: {}
+      - name: nfs-media
+        nfs:
+          server: 192.168.2.254
+          path: /mnt/tank/downloads
+      - name: config
+        persistentVolumeClaim:
+          claimName: qbittorrent-config

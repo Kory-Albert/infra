@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: influxdb
-  namespace: kube-prometheus-stack
   labels:
     app: influxdb
 spec:
@@ -32,4 +31,4 @@ spec:
       volumes:
       - name: data
         persistentVolumeClaim:
-          claimName: influxdb-nfs-data
+          claimName: influxdb-data

@@ -1,0 +1,35 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: koryalbert-net-ingress
+  namespace: koryalbert-net
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: traefik
+  tls:
+  - hosts:
+    - koryalbert.net
+    - www.koryalbert.net
+    secretName: koryalbert-net-tls-cert
+  rules:
+  - host: koryalbert.net
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: koryalbert-net
+            port:
+              number: 80
+  - host: www.koryalbert.net
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: koryalbert-net
+            port:
+              number: 80

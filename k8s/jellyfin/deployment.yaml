@@ -13,20 +13,6 @@ spec:
       labels:
         app: jellyfin
     spec:
-      tolerations:
-        - key: "nvidia.com/gpu"
-          operator: "Equal"
-          value: "true"
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: gpu
-                operator: In
-                values:
-                  - "true"
-      priorityClassName: high
       containers:
         - name: jellyfin
           image: lscr.io/linuxserver/jellyfin:10.11.6
@@ -40,6 +26,9 @@ spec:
               value: "1000"
             - name: TZ
               value: "America/Los_Angeles"
+          # Gives the container necessary permissions to access host hardware devices
+          securityContext:
+            privileged: true
           volumeMounts:
             - mountPath: /config
               name: config-vol
@@ -49,9 +38,9 @@ spec:
               name: movies-vol
             - mountPath: /data/music
               name: music-vol
-          resources:
-            limits:
-              nvidia.com/gpu: 1
+            # Mount the Intel render device
+            - mountPath: /dev/dri
+              name: dev-dri
           readinessProbe:
             httpGet:
               path: /web
@@ -62,6 +51,9 @@ spec:
         - name: config-vol
           persistentVolumeClaim:
             claimName: jellyfin-local-pvc
+        - name: dev-dri
+          hostPath:
+            path: /dev/dri
         - name: tvshows-vol
           nfs:
             server: 192.168.2.254

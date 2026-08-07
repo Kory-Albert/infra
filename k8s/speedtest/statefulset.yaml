@@ -1,20 +1,19 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: postgres
-  namespace: speedtest
+  name: speedtest-postgres
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: postgres
+      app: speedtest-postgres
   template:
     metadata:
       labels:
-        app: postgres
+        app: speedtest-postgres
     spec:
       containers:
-        - name: postgres
+        - name: speedtest-postgres
           image: postgres:15.1
           resources:
             requests:
@@ -44,4 +43,4 @@ spec:
       volumes:
         - name: postgres
           persistentVolumeClaim:
-            claimName: speedtest-db-nfs-pvc
+            claimName: speedtest-db-pvc

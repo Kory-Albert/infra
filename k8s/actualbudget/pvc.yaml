@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: actual-budget-nfs-pvc
-  namespace: actualbudget
+  name: actual-budget-pvc
+  namespace: default
 spec:
   accessModes:
-    - ReadWriteMany
-  storageClassName: nfs-client
+    - ReadWriteOnce
+  storageClassName: local-path
   resources:
     requests:
-      storage: 2Gi
+      storage: 10Mi

@@ -59,4 +59,4 @@ spec:
       volumes:
         - name: bookstack-app-data
           persistentVolumeClaim:
-            claimName: bookstack-app-nfs-pvc
+            claimName: bookstack-app-pvc

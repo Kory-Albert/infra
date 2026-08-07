@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: cookbook-db
-  namespace: "cookbook"
   labels:
     app: cookbook-db
 spec:
@@ -46,4 +45,4 @@ spec:
       volumes:
         - name: cookbook-db-data
           persistentVolumeClaim:
-            claimName: cookbook-db-nfs-pvc
+            claimName: cookbook-db-pvc

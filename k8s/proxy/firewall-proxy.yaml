@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-firewall-svc
+  namespace: default
+spec:
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 443
+---
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
+metadata:
+  name: external-firewall-svc
+  namespace: default
+  labels:
+    kubernetes.io/service-name: external-firewall-svc
+addressType: IPv4
+ports:
+  - port: 443
+    protocol: TCP
+endpoints:
+  - addresses:
+      - 192.168.2.1
+    conditions:
+      ready: true
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: external-proxy-firewall
+  namespace: default
+spec:
+  parentRefs:
+    - name: gateway-local-koryalbert
+      namespace: gateway
+      sectionName: local-koryalbert-net
+  hostnames:
+    - "firewall.local.koryalbert.net"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: external-firewall-svc
+          port: 443
+
