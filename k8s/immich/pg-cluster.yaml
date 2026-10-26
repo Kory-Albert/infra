@@ -18,5 +18,5 @@ spec:
         - CREATE EXTENSION earthdistance CASCADE;
 
   storage:
-    size: 20Gi
-    storageClass: nfs-client
+    size: 2Gi
+    storageClass: local-path
