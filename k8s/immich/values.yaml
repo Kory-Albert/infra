@@ -6,6 +6,9 @@ server:
           image:
             tag: v2.4.1
             pullPolicy: IfNotPresent
+          # Elevated hardware security permission
+          securityContext:
+            privileged: true
           env:
             DB_HOSTNAME:
               valueFrom:
@@ -28,6 +31,17 @@ server:
                   name: immich-db-app
                   key: dbname
 
+# iGPU
+persistence:
+  dev-dri:
+    enabled: true
+    type: hostPath
+    hostPath: /dev/dri
+    advancedMounts:
+      main:
+        main:
+          - path: /dev/dri
+
 valkey:
   enabled: true
 
@@ -35,3 +49,25 @@ immich:
   persistence:
     library:
       existingClaim: immich-library-pvc
+
+machine-learning:
+  enabled: false
+
+ingress:
+  main:
+    enabled: true
+    className: "traefik"
+    annotations:
+      cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    hosts:
+      - host: immich.local.koryalbert.net
+        paths:
+          - path: "/"
+            pathType: Prefix
+            service:
+              name: immich-server
+              port: 2283
+    tls:
+      - secretName: immich-tls-cert
+        hosts:
+          - immich.local.koryalbert.net
