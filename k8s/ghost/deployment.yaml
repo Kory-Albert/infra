@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: ghost
-          image: ghost:5.105.0
+          image: ghost:6.78.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 2368
